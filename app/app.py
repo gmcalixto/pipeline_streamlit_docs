@@ -4,17 +4,17 @@ import numpy as np
 import plotly.express as px
 
 
-def exibir_tabela_dados(data):
-    """
-        Exibe a table CSV carregada
+# def exibir_tabela_dados(data):
+#     """
+#         Exibe a table CSV carregada
 
-        Parâmetros:
-            data: DataFrame referente ao CSV carregado
+#         Parâmetros:
+#             data: DataFrame referente ao CSV carregado
 
-    """
+#     """
 
-    st.subheader("Dados de origem")
-    st.dataframe(data)
+#     st.subheader("Dados de origem")
+#     st.dataframe(data)
 
 def exibir_grafico_pessoas_genero(data):
     """
@@ -158,20 +158,32 @@ st.set_page_config(page_title="Indicadores referente ao arquivo CSV", page_icon=
 
 
 #abre o arquivo manualmente
-file = 'persons.csv'
-data = pd.read_csv(file)
+
+
+#exceção tratada para quando não tem carga de arquivo CSV  (para não dar erro no pdoc)
+try:
+    file = 'persons.csv'
+    data = pd.read_csv(file)
+    st.session_state["dataset"] = data
+
+except FileNotFoundError:
+    st.info("Por favor, faça o upload de um arquivo CSV para visualizar o mapa.")
 
 st.title("Indicadores referente ao arquivo CSV")
 
 
-exibir_tabela_dados(data)
+#exibir_tabela_dados(data)
 
-exibir_grafico_pessoas_genero(data)
 
-exibir_agrupamento_geracao(data)
+#exceção tratada para quando não tem carga de arquivo CSV  (para não dar erro no pdoc)
+if "dataset" in st.session_state:
 
-exibir_distribuicao_status_emprego(data)
+    exibir_grafico_pessoas_genero(st.session_state["dataset"])
 
-histograma_geral_idades(data)
+    exibir_agrupamento_geracao(st.session_state["dataset"])
 
-histograma_geral_generos(data)
+    exibir_distribuicao_status_emprego(st.session_state["dataset"])
+
+    histograma_geral_idades(st.session_state["dataset"])
+
+    histograma_geral_generos(st.session_state["dataset"])
