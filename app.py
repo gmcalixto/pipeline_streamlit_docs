@@ -5,11 +5,25 @@ import plotly.express as px
 
 
 def exibir_tabela_dados(data):
+    """
+        Exibe a table CSV carregada
+
+        Parâmetros:
+            data: DataFrame referente ao CSV carregado
+
+    """
 
     st.subheader("Dados de origem")
     st.dataframe(data)
 
 def exibir_grafico_pessoas_genero(data):
+    """
+        Exibe o gráfico de pessoas por gênero
+
+        Parâmetros:
+            data: DataFrame referente ao CSV carregado
+
+    """
 
     #gerando dataset de agrupamento de genero
     gender_counts = data['gender'].value_counts().rename_axis('gender').reset_index(name='counts')
@@ -22,6 +36,14 @@ def exibir_grafico_pessoas_genero(data):
 
 def exibir_agrupamento_geracao(data):
 
+    """
+        Exibe o gráfico de agrupamento por geração
+
+        Parâmetros:
+            data: DataFrame referente ao CSV carregado
+
+    """
+
     #gerando dataset de agrupamento de geração
     generation_counts = data['generation'].value_counts().rename_axis('generation').reset_index(name='counts')
     generation_counts.set_index('generation', inplace=True)
@@ -32,6 +54,15 @@ def exibir_agrupamento_geracao(data):
     st.bar_chart(generation_counts['counts'], color= "#ffaa00",x_label="Geração",y_label="Quantidade", horizontal=True)
 
 def exibir_media_educacao_genero(data):
+    
+    """
+        Exibe o gráfico de média de educação por gênero
+
+        Parâmetros:
+            data: DataFrame referente ao CSV carregado
+
+    """
+    
 
     #gerando dataset de agrupamento de média de anos de educação por gênero
     gender_education_mean = data.groupby('gender')['years_of_education'].mean().reset_index(name='means')
@@ -43,6 +74,14 @@ def exibir_media_educacao_genero(data):
     st.bar_chart(gender_education_mean['means'], color= "#00aa00",x_label="Geração",y_label="Média de anos trabalhados")
 
 def exibir_distribuicao_status_emprego(data):
+
+    """
+        Exibe a distribuição de status de emprego
+
+        Parâmetros:
+            data: DataFrame referente ao CSV carregado
+
+    """
 
     #gerando dataset de estado atual de emprego
     job_counts = data['employment_status'].value_counts().rename_axis('employment_status').reset_index(name='counts')
@@ -56,6 +95,14 @@ def exibir_distribuicao_status_emprego(data):
     st.plotly_chart(fig)
 
 def histograma_geral_idades(data):
+    
+    """
+        Exibe o histograma geral de idades
+
+        Parâmetros:
+            data: DataFrame referente ao CSV carregado
+
+    """
 
     # Criar faixas etárias
     data['age_group'] = pd.cut(data['age'], bins=[0, 18, 30, 45, 60, 100], labels=['0-18', '19-30', '31-45', '46-60', '61+'])
@@ -78,6 +125,14 @@ def histograma_geral_idades(data):
     st.plotly_chart(fig_grouped_age)
 
 def histograma_geral_generos(data):
+
+    """
+        Exibe o histograma geral de gêneros
+
+        Parâmetros:
+            data: DataFrame referente ao CSV carregado
+
+    """
 
     #distribuição por gênero e por idade
     age_gender_distribution = data.groupby(['age_group', 'gender'], observed=True).size().unstack(fill_value=0)
